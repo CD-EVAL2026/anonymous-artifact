@@ -20,12 +20,14 @@ CD-EVAL/
 │   ├── Relationships.ipynb      # Evaluation pipeline for relationship dimension (S1-S6)
 │   └── Analysis.ipynb           # Result analysis: Spearman, Pearson, MAE, ICC + figures
 ├── Results/
-│   ├── ClaudeAtt.csv            # Claude scores — attributes
-│   ├── ClaudeClass.csv          # Claude scores — classes
-│   ├── ClaudeRel.csv            # Claude scores — relationships
-│   ├── GPTAtt.csv               # GPT scores — attributes
-│   ├── GPTClass.csv             # GPT scores — classes
-│   └── GPTRel.csv               # GPT scores — relationships
+│   ├── Scores/
+│   │   ├── ClaudeAtt.csv        # Claude scores — attributes
+│   │   ├── ClaudeClass.csv      # Claude scores — classes
+│   │   ├── ClaudeRel.csv        # Claude scores — relationships
+│   │   ├── GPTAtt.csv           # GPT scores — attributes
+│   │   ├── GPTClass.csv         # GPT scores — classes
+│   │   └── GPTRel.csv           # GPT scores — relationships
+│   └── Figures/
 └── README.md
 ```
 
