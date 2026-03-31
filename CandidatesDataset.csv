@@ -1,0 +1,796 @@
+id,student_answer,score1,score2,score3,score4,score5,score6
+1,"
+@startuml
+' Skin parameters for better readability
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+}
+left to right direction
+
+' Define classes
+class Customer {
+    -customerId: String
+    -name: String
+    -address: String
+    -phone: String
+    -email: String
+    +getProfile(): void
+}
+
+class Broker {
+    -brokerId: String
+    -name: String
+    -expertise: String
+    +assessProfile(): boolean
+    +makeOffer(): void
+}
+
+class InsurancePolicy {
+    -policyNumber: String
+    -type: String
+    -price: double
+    -startDate: Date
+    -endDate: Date
+    +calculatePremium(): double
+}
+
+class Contract {
+    -contractId: String
+    -signatureDate: Date
+    -paymentFrequency: String
+    -status: String
+    +sign(): void
+    +generateInvoice(): void
+}
+
+class ClaimCase {
+    -claimId: String
+    -incidentDate: Date
+    -description: String
+    -status: String
+    +submit(): void
+    +process(): void
+}
+
+class Estimator {
+    -estimatorId: String
+    -name: String
+    -areaOfExpertise: String
+    +assessClaim(): Report
+}
+
+class Report {
+    -reportId: String
+    -date: Date
+    -findings: String
+    -recommendation: String
+    +generate(): void
+    +archive(): void
+}
+
+class Compensation {
+    -compensationId: String
+    -amount: double
+    -decisionDate: Date
+    -eligibleCosts: String
+    +calculate(): double
+    +pay(): void
+}
+
+' Define relationships
+Customer ""1"" -- ""1"" Broker : assigned to
+Customer ""1"" -- ""1..*"" InsurancePolicy : holds
+InsurancePolicy ""1"" -- ""1"" Contract : results in
+Customer ""1"" -- ""0..*"" ClaimCase : files
+ClaimCase ""1"" -- ""1..*"" Estimator : assessed by
+Estimator ""1"" -- ""1..*"" Report : creates
+ClaimCase ""1"" -- ""1..*"" Report : has
+ClaimCase ""1"" -- ""0..1"" Compensation : approved for
+
+@enduml",0.8,1,0.62,0.31,0.5,0.88
+2,"
+@startuml
+
+class Bank {
+}
+
+class Customer {
+  - firstName: String
+  - lastName: String
+}
+
+class Branch {
+}
+
+abstract class Account {
+  - accountNumber: int
+  - balance: double
+}
+
+class CurrentAccount {
+  - overdraftLimit: double
+}
+
+class SavingsAccount {
+}
+
+Bank ""1"" -- ""0..*"" Customer : manages
+Bank ""1"" *-- ""0..*"" Branch : consists of
+Customer ""1"" -- ""1..5"" Account : has
+Account ""1..*"" -- ""1"" Customer : owner
+
+Account <|-- CurrentAccount
+Account <|-- SavingsAccount
+
+@enduml",1,1,1,1,1,0.83
+3,"
+ @startuml
+
+class WebPortal {
+  - versionNumber : String
+  - url : String
+}
+
+class Building {
+  - id : String
+  - name : String
+  - energyClass : char
+  - address : String
+  - yearOfConstruction : int
+}
+
+class User {
+  - username : String
+  - email : String
+  - password : String
+  - isActivated : boolean
+}
+
+class Administrator {
+  - idCardNumber : String
+}
+
+abstract class Entry {
+  - name : String
+  - isPublic : boolean
+}
+
+class TextEntry {
+  - textContent : String
+}
+
+class NumericEntry {
+  - value : float
+  - unit : String
+}
+
+class Image {
+  - filename : String
+  - isProfilePhoto : boolean
+}
+
+class Comment {
+  - content : String
+  - timestamp : Date
+}
+
+' Relationships
+WebPortal ""1"" -- ""0..*"" Building : provides >
+WebPortal ""1"" -- ""0..*"" User : has registered >
+
+User ""1"" -- ""0..*"" Building : owns >
+User ""1"" -- ""0..*"" Comment : creates >
+
+Building ""1"" *-- ""0..*"" Entry : contains >
+Building ""1"" *-- ""1..*"" Image : has >
+Building ""1"" -- ""0..*"" Comment : has >
+
+Administrator --|> User
+
+Entry <|-- TextEntry
+Entry <|-- NumericEntry
+
+@enduml",0.9,1,1,0.81,0.8,0.9
+4,"
+@startuml
+
+class Driver {
+  - driverID : String
+  - name : String
+  - isSick : boolean
+}
+
+class Bus {
+  - licensePlate : String
+  - inRepairShop : boolean
+}
+
+class Route {
+  - routeNumber : int
+}
+
+class Assignment {
+  - date : Date
+}
+
+class Shift {
+  - shiftType : String
+}
+
+Driver ""1"" -- ""0..*"" Shift : has
+Bus ""1"" -- ""0..*"" Assignment : has
+Route ""1"" -- ""0..*"" Assignment : has
+Assignment ""1"" -- ""0..*"" Shift : has
+
+@enduml",0.83,1,0.875,1,0.5,0.5
+5,"
+@startuml
+
+class Product {
+  - name: String
+  - description: String
+  - netPrice: double
+}
+
+class Company {
+  - name: String
+}
+
+class Country {
+  - name: String
+  - vatRate: double
+  - currency: String
+  - euroConversionRate: double
+}
+
+class Representative {
+  - firstName: String
+  - lastName: String
+  - socialSecurityNumber: String
+  - telephone: String
+  - email: String
+}
+
+class Customer {
+  - name: String
+  - address: String
+  - telephone: String
+  - email: String
+}
+
+class Order {
+  - orderId: String
+  - quantity: int
+  - orderDate: Date
+  - deliveryDate: Date
+}
+
+Company ""1"" -- ""0..*"" Product : manufactures
+Country ""1"" -- ""0..*"" Product : soldIn
+Product ""1"" -- ""0..*"" Order : orderedProduct
+Country ""1"" -- ""1"" Representative : responsibleFor
+Representative ""1"" -- ""0..*"" Order : places
+Customer ""1"" -- ""0..*"" Order : orders
+Customer ""0..*"" -- ""0..*"" Country : resellsIn
+
+@enduml",1,1,1,1,0.75,1
+6,"
+@startuml
+' Enabling automatic relationship detection
+!pragma useIntermediatePackages false
+
+class Apartment {
+  -address: String
+  -emailAddress: String
+}
+
+class Inhabitant {
+  -username: String
+  -password: String
+  -adminRights: boolean
+}
+
+class Room {
+  -description: String
+}
+
+class Sensor {
+  -vendorId: String
+  -description: String
+  -unit: Unit
+  -threshold: float
+}
+
+class TemperatureSensor {
+  -minValue: float
+  -maxValue: float
+}
+
+class PowerSensor {
+  -counterReading: float
+}
+
+class MeasurementValue {
+  -timestamp: Date
+  -value: float
+}
+
+enum Unit {
+  CELSIUS
+  WATT
+}
+
+class SensorController {
+}
+
+class EMonitor {
+}
+
+' Relationships
+Apartment ""1"" -- ""1..*"" Room : contains
+Apartment ""1"" -- ""1..*"" Inhabitant : has
+
+Room ""1"" -- ""1..*"" Sensor : contains
+
+Sensor <|-- TemperatureSensor
+Sensor <|-- PowerSensor
+
+Sensor ""1"" -- ""0..*"" MeasurementValue : records
+
+Inhabitant ""1"" -- ""0..*"" Sensor : queries/configures >
+
+SensorController ""1"" -- ""1"" Apartment : manages
+SensorController ""1"" -- ""1..*"" Sensor : controls
+
+EMonitor -- SensorController : checks thresholds >
+EMonitor -- Apartment : sends alerts to >
+
+MeasurementValue --> Sensor : belongs to
+
+@enduml",1,1,0.93,0.93,0.67,0.75
+7,"
+@startuml
+class Person {
+  - personID: String
+  - phoneNumber: String
+  - keywords: String
+}
+
+class Institution {
+  - institutionCode: String
+}
+
+abstract class ScientificArticle {
+  - DOI: String
+  - title: String
+}
+
+class PeerReviewedPaper {
+  - citationCount: int
+}
+
+class TechnicalReport {
+}
+
+class Publisher {
+  - name: String
+}
+
+class Journal {
+  - name: String
+  - impactFactor: double
+}
+
+Person ""1"" -- ""1"" Institution : works for
+
+Person ""1..*"" -- ""0..*"" ScientificArticle : authors >
+(Person, ScientificArticle) .. AuthorPosition
+class AuthorPosition {
+  - position: int
+}
+
+Person ""0..*"" -- ""0..*"" PeerReviewedPaper : reviews >
+
+ScientificArticle <|-- PeerReviewedPaper
+ScientificArticle <|-- TechnicalReport
+
+Institution ""1"" -- ""0..*"" TechnicalReport : publishes
+
+Publisher ""1"" -- ""1..*"" Journal : publishes
+
+Institution ""0..*"" -- ""0..*"" Journal : subscribes to
+
+PeerReviewedPaper ""0..*"" -- ""1"" Journal : published in
+
+@enduml",1,1,1,1,1,1
+8,"
+@startuml Facepage Class Diagram
+
+' Hide unnecessary details for clarity
+hide empty members
+skinparam classAttributeIconSize 0
+
+class User {
+  -id: int {unique}
+  -name: String
+  -email: String
+  -dateOfBirth: Date
+}
+
+class Account {
+  -accountNumber: int {unique}
+}
+
+class PersonalAccount {
+  -sendFriendRequest()
+  -acceptFriendRequest()
+}
+
+class BusinessAccount {
+  -companyName: String
+  -monthlyFee: double
+  -payMonthlyFee()
+}
+
+class Page {
+  -pageName: String
+  -numberOfVisits: int
+  -addPrivilege()
+}
+
+class AdvertisementPage {
+  -bounceRate: double
+  -clickThroughRate: double
+  -conversionRate: double
+}
+
+class Privilege {
+  -canWriteOnWall: boolean
+  -canAdjustInfo: boolean
+}
+
+' Relationships
+User ""1"" -- ""1..*"" Account : has >
+Account <|-- PersonalAccount
+Account <|-- BusinessAccount
+
+PersonalAccount ""1"" -- ""0..*"" FriendRequest : sends/receives >
+PersonalAccount ""1"" -- ""0..*"" Privilege : grants >
+
+PersonalAccount ""1"" -- ""0..*"" Page : creates >
+BusinessAccount ""1"" -- ""0..*"" Page : creates >
+BusinessAccount ""1"" -- ""0..*"" AdvertisementPage : creates >
+
+Page ""1"" -- ""0..*"" Privilege : has >
+Page <|-- AdvertisementPage
+
+
+
+@enduml",0.89,1,0.92,0.79,0.45,0.8
+9,"
+@startuml
+class Center {
+  - name: String
+  - address: String
+}
+
+class Room {
+  - roomNumber: int
+  - maxCapacity: int
+}
+
+class Person {
+  - firstName: String
+  - familyName: String
+  - birthDate: Date
+}
+
+class Trainer {
+  - diploma: String
+}
+
+abstract class Session {
+  - date: Date
+  - startingHour: Time
+}
+
+class IndividualSession {
+}
+
+class GroupSession {
+  - type: String
+}
+
+Center ""1"" *-- ""1..*"" Room : has
+Session ""*"" -- ""1"" Room : takes place in
+Session ""*"" -- ""1..*"" Person : participates
+Person <|-- Trainer
+Session <|-- IndividualSession
+Session <|-- GroupSession
+GroupSession ""*"" -- ""1"" Trainer : supervised by
+
+@enduml",0.875,1,1,1,0.67,0.86
+10,"
+@startuml
+skinparam classAttributeIconSize 0
+
+enum Interval {
+    WEEKLY
+    MONTHLY
+    EVERY_HALF_YEAR
+    YEARLY
+}
+
+enum AppointmentType {
+    APPOINTMENT_REQUIRED
+    WALK_IN_ONLY
+    DROP_OFF
+}
+
+class Doctor {
+    - practitionerNumber: int
+    - signature: Image
+    - fullName: String
+    - address: String
+    - phoneNumber: String
+}
+
+class Patient {
+    - healthNumber: String
+    - firstName: String
+    - lastName: String
+    - dateOfBirth: Date
+    - address: String
+    - phoneNumber: String
+}
+
+class Requisition {
+    - validFromDate: Date
+    - repeatCount: int
+    - interval: Interval
+}
+
+class TestGroup {
+    - name: String
+}
+
+class Test {
+    - name: String
+    - duration: int
+    - durationIndependentOfCount: boolean
+    - appointmentType: AppointmentType
+}
+
+class TestResult {
+    - result: boolean
+    - report: String
+}
+
+class Lab {
+    - name: String
+    - registrationNumber: String
+    - address: String
+    - cancellationFee: double
+}
+
+class BusinessHours {
+    - dayOfWeek: String
+    - startTime: Time
+    - endTime: Time
+}
+
+class Appointment {
+    - confirmationNumber: String
+    - date: Date
+    - startTime: Time
+    - endTime: Time
+}
+
+Doctor ""1"" --> ""0..*"" Requisition : creates
+Patient ""1"" --> ""0..*"" Requisition : assigned to
+Requisition ""1"" --> ""1..*"" Test : contains
+Test ""1..*"" --> ""1"" TestGroup : belongs to
+Test ""1"" --> ""0..1"" TestResult : has
+Requisition ""0..*"" --> ""1"" Lab : directed to
+Patient ""1"" --> ""0..*"" Appointment : books
+Appointment ""1"" --> ""1"" Requisition : for
+Lab ""1"" *-- ""7"" BusinessHours : has
+
+@enduml",0.73,1,0.97,1,0.42,0.78
+11,"
+@startuml
+
+class City {
+    - name: String
+    - inhabitants: int
+}
+
+class Attraction {
+    - name: String
+    - address: String
+}
+
+class GuidedTour {
+    - number: int
+    - duration: int
+}
+
+class Person {
+    - name: String
+}
+
+class Visitor {
+}
+
+class Guide {
+}
+
+class Discount {
+    - amount: double
+}
+
+City ""1"" --> ""1..*"" Attraction : has
+Attraction ""1"" --> ""0..*"" GuidedTour : offers
+GuidedTour ""1"" --> ""1"" Guide : requires
+GuidedTour ""0..*"" --> ""0..20"" Visitor : participates in
+GuidedTour ""0..*"" -- ""0..*"" Visitor : discount
+(GuidedTour, Visitor) .. Discount
+
+Person <|-- Visitor
+Person <|-- Guide
+
+@enduml",1,1,1,1,1,0.875
+12,"
+@startuml
+
+class Game {
+  - maxPlayers: int
+  - currentPlayerIndex: int
+  - isOver: boolean
+  + start()
+  + nextTurn()
+  + checkWin(): boolean
+}
+
+class Board {
+  + placeTile(tile: Tile)
+  + connectTiles(t1: Tile, t2: Tile, side: String)
+}
+
+class Tile {
+  - color: String
+  - isHidden: boolean
+  - isVisited: boolean
+}
+
+class ActionTile {
+  - disabledTurns: int
+  - turnsDisabled: int
+}
+
+class ConnectionPiece {
+}
+
+class Player {
+  - name: String
+  - order: int
+}
+
+class PlayingPiece {
+  - color: String
+}
+
+class Die {
+  + roll(): int
+}
+
+class Deck {
+  + drawCard(): ActionCard
+}
+
+class ActionCard {
+  - actionType: String
+}
+
+class Designer {
+  + defineBoard()
+  + setHiddenTile(tile: Tile)
+  + setStartingPosition(player: Player, tile: Tile)
+  + setActionTileDisabledTurns(tile: ActionTile, turns: int)
+  + buildDeck()
+}
+
+' Spare connection pieces pile
+class SparePile {
+  - count: int
+  + addPiece()
+  + removePiece(): ConnectionPiece
+}
+
+' Relationships
+Game ""1"" *-- ""1"" Board
+Game ""1"" *-- ""1"" Deck
+Game ""1"" *-- ""1"" Die
+Game ""1"" *-- ""1"" SparePile
+Game ""1"" *-- ""2..4"" Player
+Game ""1"" -- ""1"" Designer
+
+Board ""1"" *-- ""1..*"" Tile
+Board ""1"" *-- ""0..*"" ConnectionPiece
+
+ActionTile --|> Tile
+
+Deck ""1"" *-- ""32"" ActionCard
+
+Player ""1"" *-- ""1"" PlayingPiece
+Player ""1"" -- ""1"" Tile : currentPosition
+
+ConnectionPiece ""1"" -- ""2"" Tile : connects
+
+@enduml",0.44,1,0.31,0.62,0.29,1
+13,"
+@startuml
+
+class University {
+    - totalEmployees: int
+}
+
+class Faculty {
+    - name: String
+}
+
+class Institute {
+    - name: String
+    - address: String
+}
+
+class Employee {
+    - ssn: String
+    - name: String
+    - email: String
+}
+
+class AdminStaff {
+}
+
+class ResearchAssistant {
+    - fieldOfResearch: String
+}
+
+class Lecturer {
+}
+
+class Project {
+    - name: String
+    - startDate: Date
+    - endDate: Date
+}
+
+class Course {
+    - id: String
+    - name: String
+    - weeklyHours: int
+}
+
+University ""1"" *-- ""1..*"" Faculty
+Faculty ""1"" *-- ""1..*"" Institute
+Faculty ""1"" --> ""1"" Employee : deanedBy
+University ""1"" *-- ""1..*"" Employee
+
+Employee <|-- AdminStaff
+Employee <|-- ResearchAssistant
+ResearchAssistant <|-- Lecturer
+
+ResearchAssistant ""1..*"" --> ""1..*"" Institute : assignedTo
+ResearchAssistant ""0..*"" --> ""0..*"" Project : involvement
+(ResearchAssistant, Project) .. Involvement
+
+class Involvement {
+    - hours: int
+}
+
+Lecturer ""1"" --> ""0..*"" Course : teaches
+
+@enduml",1,1,0.93,1,1,1
