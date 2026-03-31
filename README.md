@@ -10,6 +10,20 @@ The framework investigates six evaluation scenarios combining chain-of-thought p
 
 ## Repository Structure
 
+
+
+## Evaluation Scenarios
+
+| ID | Scenario | Gold Reference | Chain-of-Thought | Reflection |
+|----|----------|:-:|:-:|:-:|
+| S1 | Simple baseline | ✗ | ✗ | ✗ |
+| S2 | Auto-CoT | ✗ | ✓ | ✗ |
+| S3 | Auto-CoT + Reflection | ✗ | ✓ | ✓ |
+| S4 | Reference only | ✓ | ✗ | ✗ |
+| S5 | Reference + CoT | ✓ | ✓ | ✗ |
+| S6 | Reference + CoT + Reflection | ✓ | ✓ | ✓ |
+
+
 CD-EVAL/
 ├── Data/
 │   ├── GoldDataset.csv          # 13 gold PlantUML diagrams
@@ -33,20 +47,7 @@ CD-EVAL/
 │   ├── GPTClass.csv             # GPT scores — classes
 │   ├── GPTRel.csv               # GPT scores — relationships
 └── README.md
-```
 
-## Evaluation Scenarios
-
-| ID | Scenario | Gold Reference | Chain-of-Thought | Reflection |
-|----|----------|:-:|:-:|:-:|
-| S1 | Simple baseline | ✗ | ✗ | ✗ |
-| S2 | Auto-CoT | ✗ | ✓ | ✗ |
-| S3 | Auto-CoT + Reflection | ✗ | ✓ | ✓ |
-| S4 | Reference only | ✓ | ✗ | ✗ |
-| S5 | Reference + CoT | ✓ | ✓ | ✗ |
-| S6 | Reference + CoT + Reflection | ✓ | ✓ | ✓ |
-
-## Data Description
 
 ### Gold Diagrams (`GoldDataset.csv`)
 
