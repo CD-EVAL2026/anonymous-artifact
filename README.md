@@ -9,6 +9,7 @@ CD-EVAL is a framework for evaluating PlantUML class diagram quality using large
 The framework investigates six evaluation scenarios combining chain-of-thought prompting, gold reference diagrams, and self-reflection, enabling controlled comparison of each mechanism's contribution.
 
 ## Repository Structure
+
 CD-EVAL/
 ├── Data/
 │   ├── GoldDataset.csv          # 13 gold PlantUML diagrams
