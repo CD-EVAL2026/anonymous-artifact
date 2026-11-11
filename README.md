@@ -1,60 +1,101 @@
 # LLMs as Judges of UML Class Diagram Quality: An Exploratory Study
 
-This repository contains the replication package for the paper *"CD-EVAL: Can LLMs Judge the Quality of Class Diagrams?"*, submitted for peer review.
+Replication package for the paper *"LLMs as Judges of UML Class Diagram Quality: An Exploratory Study"*, submitted for double-blind peer review.
 
 ## Overview
-CD-EVAL is a framework for evaluating PlantUML class diagram quality using large language models as judges. The framework assesses three element types (classes, attributes, and relationships) along two quality dimensions (completeness and correctness) using formally defined, element-level metrics.
 
-The framework investigates six evaluation scenarios combining chain-of-thought prompting, gold reference diagrams, and self-reflection, enabling controlled comparison of each mechanism's contribution.
+CD-EVAL is a framework for assessing PlantUML class diagrams with a large language model (LLM) as judge. The judge scores three element types (classes, attributes, relationships) along two quality dimensions (completeness, correctness), yielding a 3×2 score matrix per diagram.
+
+A reference diagram serves as an **anchor rather than as the single correct solution**: a candidate element that matches a reference element must agree with its properties, and a candidate element without a match is still correct if the problem description supports it.
+
+CD-EVAL has a core prompt and three optional components:
+
+- **Reference diagram** – the reference solution from the dataset;
+- **Auto-CoT** – evaluation steps generated automatically by the judge model (as in G-EVAL) and included in every scoring prompt;
+- **Self-reflection** – up to R = 2 review rounds; a second round runs only if the first changed a score by more than δ = 0.10.
+
+The study compares two LLM judges (GPT-5.4 and Claude Opus 4.6) with expert scores and with two non-LLM structural matching baselines (exact and fuzzy name matching).
 
 ## Repository Structure
 
 ```
 CD-EVAL/
 ├── Data/
-│   ├── GoldDataset.csv          # 13 gold PlantUML diagrams with problem descriptions
-│   └── CandidatesDataset.csv    # LLM-generated candidate diagrams with human scores
+│   ├── GoldDataset.csv              # 13 problem descriptions and reference PlantUML diagrams
+│   └── CandidatesDataset.csv        # 13 candidate diagrams (DeepSeek-R1) with expert scores
 ├── Code/
-│   ├── Classes.ipynb            # Evaluation pipeline for class dimension (S1-S6)
-│   ├── Attributes.ipynb         # Evaluation pipeline for attribute dimension (S1-S6)
-│   ├── Relationships.ipynb      # Evaluation pipeline for relationship dimension (S1-S6)
-│   └── Analysis.ipynb           # Result analysis: Spearman, Pearson, MAE, ICC + figures
+│   ├── Classes.ipynb                # LLM judge, class dimension (S1–S6)
+│   ├── Attributes.ipynb             # LLM judge, attribute dimension (S1–S6)
+│   ├── Relationships.ipynb          # LLM judge, relationship dimension (S1–S6)
+│   ├── baseline.py                  # Structural matching baselines (exact, fuzzy)
+│   ├── analysis.py                  # Agreement analysis, bootstrap CIs, LaTeX tables
+│   └── fig_agreement.py             # Figure: judge vs. expert scores
 ├── Results/
-│   ├── Scores/
-│   │   ├── ClaudeAtt.csv        # Claude scores — attributes
-│   │   ├── ClaudeClass.csv      # Claude scores — classes
-│   │   ├── ClaudeRel.csv        # Claude scores — relationships
-│   │   ├── GPTAtt.csv           # GPT scores — attributes
-│   │   ├── GPTClass.csv         # GPT scores — classes
-│   │   └── GPTRel.csv           # GPT scores — relationships
-│   └── Figures/
+│   ├── Scores/                      # Judge and baseline scores next to the expert scores
+│   │   ├── ClaudeClass.csv  ClaudeAtt.csv  ClaudeRel.csv
+│   │   ├── GPTClass.csv     GPTAtt.csv     GPTRel.csv
+│   │   └── BaselineScores.csv
+│   ├── AutoCoT_Steps/               # The 12 generated Auto-CoT step sets
+│   │                                #   (2 judges × 3 element types × with/without reference)
+│   ├── Analysis/                    # Output of analysis.py (CSVs and LaTeX tables)
+│   └── Figures/                     # Output of fig_agreement.py
 └── README.md
 ```
 
-## Evaluation Scenarios
+## Judge Configurations
 
-| ID | Scenario | Gold Reference | Chain-of-Thought | Reflection |
-|----|----------|:-:|:-:|:-:|
-| S1 | Simple baseline | ✗ | ✗ | ✗ |
-| S2 | Auto-CoT | ✗ | ✓ | ✗ |
-| S3 | Auto-CoT + Reflection | ✗ | ✓ | ✓ |
-| S4 | Reference only | ✓ | ✗ | ✗ |
-| S5 | Reference + CoT | ✓ | ✓ | ✗ |
-| S6 | Reference + CoT + Reflection | ✓ | ✓ | ✓ |
+| ID | Reference diagram | Auto-CoT | Self-reflection |
+|----|:-:|:-:|:-:|
+| S1 | ✗ | ✗ | ✗ |
+| S2 | ✗ | ✓ | ✗ |
+| S3 | ✗ | ✓ | ✓ |
+| S4 | ✓ | ✗ | ✗ |
+| S5 | ✓ | ✓ | ✗ |
+| S6 | ✓ | ✓ | ✓ |
 
-## Data Description
+All configurations of an element type use the same correctness rule; without a reference, the rule refers to the problem description alone. S5 achieves the highest ICC for both judges and is used as the representative configuration in the paper.
 
-### Gold Diagrams (`GoldDataset.csv`)
+## Data
 
-13 PlantUML class diagrams selected from the community-curated Golden UML Modelset (Verbruggen et al., MODELS 2025). Each entry includes a unique scenario ID, a natural language problem description, and the gold PlantUML solution. Diagrams were selected to vary across domains and structural complexity.
+### `GoldDataset.csv`
 
-Columns: `id`, `problem`, `solution`
+13 problems from the Golden UML Modelset (Verbruggen et al., MODELS 2025), one from each of the 13 domains of the dataset. The reference diagrams have 5–16 classes and 4–21 relationships.
 
-### Candidate Diagrams (`CandidatesDataset.csv`)
+Columns: `id`, `problem` (natural-language problem description), `solution` (reference PlantUML diagram)
 
-13 candidate diagrams generated by different LLMs. Each candidate was independently scored by two human annotators on six dimensions — class completeness, class correctness, attribute completeness, attribute correctness, relationship completeness, and relationship correctness — using a continuous [0, 1] scale.
+### `CandidatesDataset.csv`
 
-Columns: `id`, `student_answer`, `score1` (class completeness), `score2` (class correctness), `score3` (attribute completeness), `score4` (attribute correctness), `score5` (relationship completeness), `score6` (relationship correctness)
+One candidate diagram per problem, generated by **DeepSeek-R1** from the problem description alone (zero-shot, without access to the reference). A generator from a different model family than both judges was used to mitigate self-preference bias.
 
-Results are already provided in the `Results/` folder for reference without re-running the evaluation.
+Each candidate was scored independently by two annotators with expertise in UML modelling on the six cells of the score matrix ([0, 1] scale); disagreements were resolved by discussion, and the **consensus scores** are reported.
 
+Columns: `id`, `student_answer` (the candidate PlantUML diagram), `score1` (class completeness), `score2` (class correctness), `score3` (attribute completeness), `score4` (attribute correctness), `score5` (relationship completeness), `score6` (relationship correctness)
+
+## Results Files
+
+Each file in `Results/Scores/` contains one row per candidate with the expert scores (`human_*`) and the judge scores for each configuration (`s1_completeness`, `s1_correctness`, …, `s6_correctness`). `BaselineScores.csv` contains the expert scores and the scores of the exact (`exact_*`) and fuzzy (`fuzzy_*`) matching baselines for all six cells.
+
+All results are provided, so the analysis can be reproduced without calling any LLM.
+
+## Reproducing the Results
+
+**Requirements:** Python 3.10+, `numpy`, `pandas`, `scipy`, `matplotlib`; for the notebooks additionally `openai`, `anthropic`, `chardet`, `tqdm`.
+
+1. **Analysis only (no API keys needed)** – run from the `Code/` folder:
+   ```
+   python baseline.py        # -> Results/Scores/BaselineScores.csv
+   python analysis.py        # -> Results/Analysis/ (MAE, agreement rate, ICC(2,1), Spearman, bootstrap CIs, tables)
+   python fig_agreement.py   # -> Results/Figures/fig_agreement.pdf
+   ```
+   `analysis.py` uses 2,000 bootstrap resamples over diagrams (seed 42) and a tolerance of ±0.1 for the agreement rate.
+
+2. **Re-running the LLM judges** – open the notebooks (e.g. in Google Colab), provide your own API keys (e.g. via Colab Secrets; no keys are included in this repository), set `scenario` (`s1`–`s6`) and `model` (`gpt-5.4` or `claude-opus-4-6`) in the last cell, and run. All calls use temperature 0; for Claude, the maximum output length is 16,000 tokens so that the Auto-CoT steps are not truncated. Auto-CoT steps are generated once per judge, element type and setting and reused (S2/S3 and S5/S6 share their steps). Note that LLM outputs are not fully deterministic, so re-runs may differ slightly from the reported scores.
+
+## Metrics
+
+- **MAE** – mean absolute difference between judge and expert scores (primary);
+- **Agreement rate** – share of scores within ±0.1 of the expert score (primary);
+- **ICC(2,1)** – absolute-agreement intraclass correlation;
+- **Spearman's ρ** – rank correlation (reported for comparability).
+
+Metrics are computed over 78 scores per judge (13 diagrams × 6 cells) and per cell; 95% confidence intervals are obtained by bootstrap resampling of diagrams.
