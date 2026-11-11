@@ -27,17 +27,11 @@ CD-EVAL/
 │   ├── Classes.ipynb                # LLM judge, class dimension (S1–S6)
 │   ├── Attributes.ipynb             # LLM judge, attribute dimension (S1–S6)
 │   ├── Relationships.ipynb          # LLM judge, relationship dimension (S1–S6)
-│   ├── baseline.py                  # Structural matching baselines (exact, fuzzy)
-│   ├── analysis.py                  # Agreement analysis, bootstrap CIs, LaTeX tables
-│   └── fig_agreement.py             # Figure: judge vs. expert scores
 ├── Results/
 │   ├── Scores/                      # Judge and baseline scores next to the expert scores
 │   │   ├── ClaudeClass.csv  ClaudeAtt.csv  ClaudeRel.csv
 │   │   ├── GPTClass.csv     GPTAtt.csv     GPTRel.csv
 │   │   └── BaselineScores.csv
-│   ├── AutoCoT_Steps/               # The 12 generated Auto-CoT step sets
-│   │                                #   (2 judges × 3 element types × with/without reference)
-│   ├── Analysis/                    # Output of analysis.py (CSVs and LaTeX tables)
 │   └── Figures/                     # Output of fig_agreement.py
 └── README.md
 ```
