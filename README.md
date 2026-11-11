@@ -1,4 +1,4 @@
-# CD-EVAL: Can LLMs Judge the Quality of Class Diagrams?
+# LLMs as Judges of UML Class Diagram Quality: An Exploratory Study
 
 This repository contains the replication package for the paper *"CD-EVAL: Can LLMs Judge the Quality of Class Diagrams?"*, submitted for peer review.
 
